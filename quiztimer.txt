@@ -1,0 +1,71 @@
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class QuizSystem {
+    private static final int QUIZ_TIME = 30; // 30 seconds per question
+    private static final int NUM_QUESTIONS = 5;
+
+    private static String[] questions = {
+        "What is the capital of France?",
+        "What is the largest planet in our solar system?",
+        "Who is the author of the book 'To Kill a Mockingbird'?",
+        "What is the chemical symbol for gold?",
+        "Who is the lead singer of the rock band Queen?"
+    };
+
+    private static String[][] options = {
+        {"Paris", "London", "Berlin", "Rome"},
+        {"Earth", "Saturn", "Jupiter", "Uranus"},
+        {"F. Scott Fitzgerald", "Harper Lee", "Jane Austen", "J.K. Rowling"},
+        {"Ag", "Au", "Hg", "Pb"},
+        {"Freddie Mercury", "Brian May", "Roger Taylor", "John Deacon"}
+    };
+
+    private static String[] correctAnswers = {
+        "Paris",
+        "Jupiter",
+        "Harper Lee",
+        "Au",
+        "Freddie Mercury"
+    };
+
+    private static int score = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        for (int i = 0; i < NUM_QUESTIONS; i++) {
+            System.out.println("Question " + (i + 1) + ": " + questions[i]);
+            for (int j = 0; j < options[i].length; j++) {
+                System.out.println((j + 1) + ". " + options[i][j]);
+            }
+
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("Time's up!");
+                    timer.cancel();
+                }
+            }, QUIZ_TIME * 1000);
+
+            System.out.print("Enter your answer (1-" + options[i].length + "): ");
+            int answer = scanner.nextInt();
+            timer.cancel();
+
+            if (options[i][answer - 1].equals(correctAnswers[i])) {
+                System.out.println("Correct!");
+                score++;
+            } else {
+                System.out.println("Incorrect. The correct answer is " + correctAnswers[i]);
+            }
+        }
+
+        System.out.println("Quiz over! Your final score is " + score + " out of " + NUM_QUESTIONS);
+        System.out.println("Summary:");
+        for (int i = 0; i < NUM_QUESTIONS; i++) {
+            System.out.println("Question " + (i + 1) + ": " + (options[i][0].equals(correctAnswers[i]) ? "Correct" : "Incorrect"));
+        }
+    }
+}
